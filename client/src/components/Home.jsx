@@ -3,6 +3,7 @@ import {Routes, Route} from "react-router-dom";
 import axios from "axios";
 import AllPuzzles from "./AllPuzzles";
 import NewPuzzle from "./NewPuzzle";
+import UpdatePuzzle from "./EditPuzzle";
 
 const Home = (props) => {
     const [allPuzzles, setAllPuzzles] = useState([]);
@@ -19,7 +20,7 @@ const Home = (props) => {
             <Routes>
                 <Route path="/" element={<AllPuzzles allPuzzles={allPuzzles}/>}/>
                 <Route path="/new" element={<NewPuzzle allPuzzles={allPuzzles} setAllPuzzles={setAllPuzzles}/>}/>
-                {/* <Route path="/edit/:id" element={<OneRecord allPuzzles={allPuzzles} setAllRecords={setAllRecords}/>}/> */}
+                <Route path="/edit/:id" element={<UpdatePuzzle allPuzzles={allPuzzles} setAllPuzzles={setAllPuzzles}/>}/>
             </Routes>
         </div>
     );

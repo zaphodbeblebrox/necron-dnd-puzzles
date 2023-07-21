@@ -3,6 +3,11 @@ import {Link} from "react-router-dom";
 
 const AllPuzzles = ({allPuzzles}) => {
 
+
+    const CopyLinkHandler = (event, id) => {
+        navigator.clipboard.writeText(`http://localhost:3000/play/${id}`);
+    }
+
     return(
         <div>
             <Link to="/puzzles/new">Add a New Puzzle</Link>
@@ -26,7 +31,9 @@ const AllPuzzles = ({allPuzzles}) => {
                                 <td className="d-flex flex-row justify-content-evenly">
                                     <Link to={`/play/${puzzle._id}`}>Play</Link>
                                     <p> | </p>
-                                    <Link to={`/edit/${puzzle._id}`}>Edit</Link>
+                                    <Link onClick={e => CopyLinkHandler(e, puzzle._id)}>Copy Link</Link>
+                                    <p> | </p>
+                                    <Link to={`/puzzles/edit/${puzzle._id}`}>Edit</Link>
                                 </td>
                             </tr>
                         );

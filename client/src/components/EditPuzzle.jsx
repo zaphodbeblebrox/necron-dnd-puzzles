@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import {Link, useNavigate} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import PuzzleData from "./PuzzleData";
 
-const NewPuzzle = ({allPuzzles, setAllPuzzles}) => {
+const UpdatePuzzle = ({allPuzzles, setAllPuzzles}) => {
     const puzzleSizes = [3,9];
+
+    const {id} = useParams();
 
     const [title, setTitle] = useState("");
     const [size, setSize] = useState(puzzleSizes[0]);
@@ -18,9 +20,23 @@ const NewPuzzle = ({allPuzzles, setAllPuzzles}) => {
 
     const navigate = useNavigate();
 
-    const newPuzzleHandler = (event) => {
+    useEffect(() => {
+        axios.get(`http://127.0.0.1:8000/api/puzzles/${id}`)
+            .then(res => {
+                setTitle(res.data[0].title);
+                setSize(res.data[0].size);
+                setDescription(res.data[0].description);
+                setDefault_positions(res.data[0].default_positions);
+                setLocked_positions(res.data[0].locked_positions);
+                setPaired_positions(res.data[0].paired_positions);
+                setSolution_positions(res.data[0].solution_positions);
+            })
+            .catch(err => console.log(err));
+    }, [])
+
+    const updatePuzzleHandler = (event) => {
         event.preventDefault();
-        const newPuzzle = {
+        const updatedPuzzle = {
             title,
             size,
             description,
@@ -30,9 +46,11 @@ const NewPuzzle = ({allPuzzles, setAllPuzzles}) => {
             solution_positions
         };
         // console.log(newRecord);
-        axios.post("http://127.0.0.1:8000/api/puzzles", newPuzzle)
+        axios.put(`http://127.0.0.1:8000/api/puzzles/${id}`, updatedPuzzle)
             .then(res => {
-                setAllPuzzles([...allPuzzles, res.data]);
+                const tempAllPuzzles = allPuzzles.filter((puzzle) => puzzle._id !== id);
+                tempAllPuzzles.push(res.data);
+                setAllPuzzles([...tempAllPuzzles]);
                 navigate("/puzzles")
             })
             .catch(err => {
@@ -46,11 +64,22 @@ const NewPuzzle = ({allPuzzles, setAllPuzzles}) => {
             });
     }
 
+    const DeletePuzzleHandler = (event) => {
+        event.preventDefault();
+        axios.delete(`http://127.0.0.1:8000/api/puzzles/${id}`)
+            .then(res => {
+                const tempAllPuzzles = allPuzzles.filter((puzzle) => puzzle._id !== id);
+                setAllPuzzles([...tempAllPuzzles]);
+                navigate("/puzzles")
+            })
+            .catch(err => console.log(err));
+    }
+
     return(
         <div>
             <Link to="/puzzles">Home</Link>
             <h3>Add a New Puzzle</h3>
-            <form onSubmit={newPuzzleHandler}>
+            <form onSubmit={updatePuzzleHandler}>
                 <div style={{color: "red"}}>
                     {errors.map((err,idx) => {
                         return(
@@ -89,11 +118,13 @@ const NewPuzzle = ({allPuzzles, setAllPuzzles}) => {
                     <label htmlFor="solution-positions">Solution Positions</label>
                     <PuzzleData data_positions={solution_positions} setDataPositions={setSolution_positions} data_type="solution" size={size}/>
                 </div>
-
-                <button>Add Puzzle</button>
+                <div>
+                <button>Update Puzzle</button>
+                <button onClick={DeletePuzzleHandler}>Delete Puzzle</button>
+                </div>
             </form>
         </div>
     );
 }
 
-export default NewPuzzle;
+export default UpdatePuzzle;
