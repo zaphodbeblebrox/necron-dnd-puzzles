@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const PuzzleSchema = mongoose.Schema({
-    type: {
+    title: {
         type: String,
-        required: [true, "Puzzle type is required!"],
+        required: [true, "Puzzle title is required!"],
     },
 
     size: {
@@ -22,7 +22,7 @@ const PuzzleSchema = mongoose.Schema({
     },
 
     locked_positions: {
-        type: [[Number]],
+        type: [[Boolean]],
         required: [true, "Locked Puzzle positions is required!"],
     },
 
