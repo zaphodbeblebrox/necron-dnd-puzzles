@@ -8,7 +8,7 @@ module.exports = {
     },
 
     findOnePuzzle: (req, res) => {
-        Puzzle.find({_id: req.params.id})
+        Puzzle.findOne({_id: req.params.id})
             .then(onePuzzle => res.json(onePuzzle))
             .catch(err => res.status(400).json(err))
     },
