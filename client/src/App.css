@@ -7,3 +7,15 @@
   height: 200px; /* Set a fixed height or use other units like % or vh */
   object-fit: cover;
 }
+
+.attempts-icon {
+  /* width: 50%; */
+  height: 200px; /* Set a fixed height or use other units like % or vh */
+  object-fit: cover;
+}
+
+.submit-btn {
+  /* width: 50%; */
+  height: 350px; /* Set a fixed height or use other units like % or vh */
+  object-fit: cover;
+}

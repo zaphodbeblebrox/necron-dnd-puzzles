@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Dials = ({puzzle, setPuzzle}) => {
+const Dials = ({puzzle, setPuzzle, isCorrect}) => {
 
     const [pairedLighting, setPairedLighting] = useState({
         "a": false,
@@ -41,6 +41,16 @@ const Dials = ({puzzle, setPuzzle}) => {
         setPairedLighting({...newLighting});
     },[])
 
+    useEffect(()=>{
+        if(isCorrect){
+            const newLighting = {...pairedLighting};
+            for (const key in newLighting){
+                newLighting[key] = true;
+            }
+            setPairedLighting({...newLighting});
+        }
+    },[isCorrect])
+
     const DialClickHandler = (event, idx, idy) => {
         event.preventDefault();
         if(puzzle.locked_positions[idx][idy]){
@@ -63,13 +73,8 @@ const Dials = ({puzzle, setPuzzle}) => {
         setPairedLighting({...newLighting});
 
         // Play audio
-        // Get a reference to the audio element
         const audioElement = document.getElementById('audioPlayer');
-
-        // Check if the audio is currently paused, and play it if so
-        if (audioElement.paused) {
-            audioElement.play();
-        }
+        audioElement.play();
     }
 
 
