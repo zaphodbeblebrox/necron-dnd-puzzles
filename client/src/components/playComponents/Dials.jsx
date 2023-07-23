@@ -15,12 +15,19 @@ const Dials = ({puzzle, setPuzzle}) => {
         "j": false
     });
 
+    // Life Dials range from 1-4
+    const lifeStart = 1;
+    const lifeLimit = 4;
+    // Death Dials range from 5-8
+    const deathStart = 5;
+    const deathLimit = 8;
+    // Necron Dial is always 9
+
     // Image name appears as [number][Off/On][Locked/Unlocked]
     const locked = "L";
     const unlocked = "U";
     const lightsOff = "F";
     const lightsOn = "N";
-    // const dialImagePath = ".../static/images/dials/";
     const dialImagePath = "/static/images/dials/";
     const dialImageExt = ".png"
 
@@ -32,6 +39,28 @@ const Dials = ({puzzle, setPuzzle}) => {
         setPairedLighting({...newLighting});
     },[])
 
+    const DialClickHandler = (event, idx, idy) => {
+        event.preventDefault();
+        if(puzzle.locked_positions[idx][idy]){
+            return;
+        }
+        // Update dial position
+        const updatedPuzzle = {...puzzle};
+        if(updatedPuzzle.current_positions[idx][idy] <= lifeLimit){
+            updatedPuzzle.current_positions[idx][idy] = (updatedPuzzle.current_positions[idx][idy] === lifeLimit) 
+                ? lifeStart : updatedPuzzle.current_positions[idx][idy] + 1;
+        }
+        else if(updatedPuzzle.current_positions[idx][idy] <= deathLimit){
+            updatedPuzzle.current_positions[idx][idy] = (updatedPuzzle.current_positions[idx][idy] === deathLimit) 
+                ? deathStart : updatedPuzzle.current_positions[idx][idy] + 1;
+        }
+        setPuzzle(updatedPuzzle);
+        // Update Lighting
+        const newLighting = {...pairedLighting};
+        newLighting[updatedPuzzle.paired_positions[idx][idy]] = (Math.round(Math.random())) ? true : false;
+        setPairedLighting({...newLighting});
+    }
+
 
     return(
         <div>
@@ -42,17 +71,13 @@ const Dials = ({puzzle, setPuzzle}) => {
                             let imagePath = `${dialImagePath}${col}`;
                             imagePath = `${imagePath}${pairedLighting[puzzle.paired_positions[idx][idy]] ? lightsOn : lightsOff}`;
                             imagePath = `${imagePath}${puzzle.locked_positions[idx][idy] ? locked : unlocked}${dialImageExt}`;
-                            console.log(imagePath);
                             return(
-                                <img src={imagePath} alt={col} className="dial"/>
+                                <img key={idy} src={imagePath} alt={col} onClick={e => DialClickHandler(e,idx,idy)} className="dial"/>
                             );
                         })}
                     </div>
                 );
             })}
-            <p>Puzzle!</p>
-            <img src="image_url_or_file_path.jpg" alt="Image Description" />
-
         </div>
     );
 }

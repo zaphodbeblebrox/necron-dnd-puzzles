@@ -27,7 +27,7 @@ const Play = (props) => {
             .catch(err => console.log("Error getting the Puzzle",err));
     }, [])
 
-    useEffect(() => console.log(puzzle),[puzzle]);
+    // useEffect(() => console.log(puzzle),[puzzle]);
 
     return(
         <div>
