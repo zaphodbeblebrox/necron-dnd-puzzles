@@ -23,6 +23,8 @@ const Dials = ({puzzle, setPuzzle}) => {
     const deathLimit = 8;
     // Necron Dial is always 9
 
+    const turnDialAudioPath = "/static/audio/audio_click.wav";
+
     // Image name appears as [number][Off/On][Locked/Unlocked]
     const locked = "L";
     const unlocked = "U";
@@ -59,11 +61,23 @@ const Dials = ({puzzle, setPuzzle}) => {
         const newLighting = {...pairedLighting};
         newLighting[updatedPuzzle.paired_positions[idx][idy]] = (Math.round(Math.random())) ? true : false;
         setPairedLighting({...newLighting});
+
+        // Play audio
+        // Get a reference to the audio element
+        const audioElement = document.getElementById('audioPlayer');
+
+        // Check if the audio is currently paused, and play it if so
+        if (audioElement.paused) {
+            audioElement.play();
+        }
     }
 
 
     return(
         <div>
+            <audio id="audioPlayer" controls hidden>
+                <source src={turnDialAudioPath} type="audio/wav" />
+            </audio>
             {puzzle.current_positions.map((row, idx) => {
                 return(
                     <div key={idx} className="d-flex flex-row justify-content-center align-items-center">

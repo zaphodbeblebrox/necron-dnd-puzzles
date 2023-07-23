@@ -12,7 +12,6 @@ const Play = (props) => {
         "solution_positions": [[1]],
         "paired_positions": [[1]],
         "default_positions": [[1]],
-
 });
 
     useEffect(() => {
