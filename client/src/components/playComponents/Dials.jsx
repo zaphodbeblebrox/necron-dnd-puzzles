@@ -73,14 +73,14 @@ const Dials = ({puzzle, setPuzzle, isCorrect}) => {
         setPairedLighting({...newLighting});
 
         // Play audio
-        const audioElement = document.getElementById('audioPlayer');
+        const audioElement = document.getElementById('audio-dial-click');
         audioElement.play();
     }
 
 
     return(
         <div>
-            <audio id="audioPlayer" controls hidden>
+            <audio id="audio-dial-click" controls hidden>
                 <source src={turnDialAudioPath} type="audio/wav" />
             </audio>
             {puzzle.current_positions.map((row, idx) => {
