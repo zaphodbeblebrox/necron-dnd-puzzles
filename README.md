@@ -5,10 +5,13 @@ The Puzzles revolve around turning the dials into their correct positions.
 There are 3 types of dials: Life, Death, Necron
 
 Life Dial's positions: North-1, East-2, South-3, West-4
+
             description: While pointing up, 1st character is a Circle with 3 lines to the left & right.
 Death Dial's positions: North-5, East-6, South-7, West-8
+
             description: While pointing up, 1st character is 3 horizontal lines.
 Necon Dial's position: 9, It cannot rotate.
+
             description: Has no pointer & features the Warhammer 40K Necron symbol.
 
 Additionally, cracked dials cannot rotate. These are the set starting clues to complete the puzzles.
