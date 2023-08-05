@@ -23,13 +23,13 @@ const UpdatePuzzle = ({allPuzzles, setAllPuzzles}) => {
     useEffect(() => {
         axios.get(`http://127.0.0.1:8000/api/puzzles/${id}`)
             .then(res => {
-                setTitle(res.data[0].title);
-                setSize(res.data[0].size);
-                setDescription(res.data[0].description);
-                setDefault_positions(res.data[0].default_positions);
-                setLocked_positions(res.data[0].locked_positions);
-                setPaired_positions(res.data[0].paired_positions);
-                setSolution_positions(res.data[0].solution_positions);
+                setTitle(res.data.title);
+                setSize(res.data.size);
+                setDescription(res.data.description);
+                setDefault_positions(res.data.default_positions);
+                setLocked_positions(res.data.locked_positions);
+                setPaired_positions(res.data.paired_positions);
+                setSolution_positions(res.data.solution_positions);
             })
             .catch(err => console.log(err));
     }, [])
