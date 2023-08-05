@@ -2,8 +2,6 @@ import React, {useState, useEffect} from "react";
 import {Routes, Route} from "react-router-dom";
 import axios from "axios";
 import AllPuzzles from "./AllPuzzles";
-import NewPuzzle from "./NewPuzzle";
-import UpdatePuzzle from "./EditPuzzle";
 import EditCreatePuzzle from "./EditCreatePuzzle";
 
 const Home = (props) => {
@@ -22,8 +20,6 @@ const Home = (props) => {
                 <Route path="/" element={<AllPuzzles allPuzzles={allPuzzles}/>}/>
                 <Route path="/new" element={<EditCreatePuzzle allPuzzles={allPuzzles} setAllPuzzles={setAllPuzzles}/>}/>
                 <Route path="/edit/:id" element={<EditCreatePuzzle allPuzzles={allPuzzles} setAllPuzzles={setAllPuzzles}/>}/>
-                {/* <Route path="/new" element={<NewPuzzle allPuzzles={allPuzzles} setAllPuzzles={setAllPuzzles}/>}/>
-                <Route path="/edit/:id" element={<UpdatePuzzle allPuzzles={allPuzzles} setAllPuzzles={setAllPuzzles}/>}/> */}
             </Routes>
         </div>
     );
