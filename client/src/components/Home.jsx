@@ -16,7 +16,7 @@ const Home = (props) => {
 
     return(
         <div>
-            <h1>The Necron Death Cult Puzzle Collection</h1>
+            <h1 className="headers">The Necron Death Cult Puzzle Collection</h1>
             <Routes>
                 <Route path="/" element={<AllPuzzles allPuzzles={allPuzzles}/>}/>
                 <Route path="/new" element={<EditCreatePuzzle allPuzzles={allPuzzles} setAllPuzzles={setAllPuzzles}/>}/>

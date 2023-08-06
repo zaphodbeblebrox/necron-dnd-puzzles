@@ -115,7 +115,7 @@ const EditCreatePuzzle = ({allPuzzles, setAllPuzzles}) => {
                 <div>
                     <label htmlFor="size">Puzzle Size</label>
                     <select name="size" id="size" value={size} onChange={e => setSize(e.target.value)}>
-                        {puzzleSizes.map((size, idx) => <option key={idx} value={size}>{size}</option>)}
+                        {puzzleSizes.map((size, idx) => <option key={idx} value={size}>{size}x{size}</option>)}
                     </select>
                 </div>
                 <div>
