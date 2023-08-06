@@ -6,6 +6,7 @@ import PlayHeader from "./PlayHeader";
 import Attempt from "./Attempt";
 
 const Play = (props) => {
+    const ambientAudioPath = "/static/audio/factory_ambience.mp3";
     const {id} = useParams();
     const [isCorrect, setIsCorrect] = useState(false);
     const [puzzle, setPuzzle] = useState({
@@ -26,6 +27,10 @@ const Play = (props) => {
                 // console.log(newPuzzle);
             })
             .catch(err => console.log("Error getting the Puzzle",err));
+
+        // Play audio
+        const audioElement = document.getElementById('audio-ambient');
+        audioElement.play();
     }, [])
 
     // useEffect(() => console.log(puzzle),[puzzle]);
@@ -38,6 +43,10 @@ const Play = (props) => {
             <div className="d-flex flex-row justify-content-center">
                 <Dials puzzle={puzzle} setPuzzle={setPuzzle} isCorrect={isCorrect}/>
                 <Attempt puzzle={puzzle} setIsCorrect={setIsCorrect}/>
+                <audio id="audio-ambient" controls hidden loop>
+                    <source src={ambientAudioPath} type="audio/mp3" />
+                </audio>
+
             </div>
         </div>
     );
