@@ -1,0 +1,9 @@
+.dial-image {
+    width: 60%;
+    object-fit: cover;
+}
+
+.dial-image-values{
+    width: 40%;
+    object-fit: cover;
+}
