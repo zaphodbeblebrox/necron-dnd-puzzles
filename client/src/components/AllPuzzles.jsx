@@ -11,6 +11,7 @@ const AllPuzzles = ({allPuzzles}) => {
     return(
         <div>
             <Link to="/puzzles/new">Add a New Puzzle</Link>
+            <Link to="/puzzles/instructions">Instructions</Link>
             <h3>Available Puzzles</h3>
             <table className="table table-striped">
                 <thead>
