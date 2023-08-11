@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import {io} from "socket.io-client";
+import {socket} from "../../service/socket";
 
 const Dials = ({puzzle, setPuzzle, isCorrect}) => {
 
@@ -33,6 +35,11 @@ const Dials = ({puzzle, setPuzzle, isCorrect}) => {
     const dialImagePath = "/static/images/dials/";
     const dialImageExt = ".png"
 
+    // const socket = io("http://localhost:8000/")
+    socket.on('connect', () => {
+        console.log(`You are connected with id: ${socket.id}`)
+    })
+
     useEffect(()=>{
         const newLighting = {...pairedLighting};
         for (const key in newLighting){
@@ -50,6 +57,11 @@ const Dials = ({puzzle, setPuzzle, isCorrect}) => {
             setPairedLighting({...newLighting});
         }
     },[isCorrect])
+
+    socket.on('execute-update', (updatedPuzzle, updatedLighting) => {
+        setPuzzle(updatedPuzzle);
+        setPairedLighting({...updatedLighting});
+    })
 
     const DialClickHandler = (event, idx, idy) => {
         event.preventDefault();
@@ -71,6 +83,9 @@ const Dials = ({puzzle, setPuzzle, isCorrect}) => {
         const newLighting = {...pairedLighting};
         newLighting[updatedPuzzle.paired_positions[idx][idy]] = (Math.round(Math.random())) ? true : false;
         setPairedLighting({...newLighting});
+
+        // Update Socket
+        socket.emit("update-dials", updatedPuzzle, newLighting);
 
         // Play audio
         const audioElement = document.getElementById('audio-dial-click');

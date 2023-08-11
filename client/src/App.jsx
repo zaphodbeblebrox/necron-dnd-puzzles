@@ -3,6 +3,8 @@ import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import Home from './components/Home';
 import Play from './components/playComponents/Play';
 import { useEffect, useState } from 'react';
+import PlaySocket from './components/playComponents/PlaySocket';
+
 
 function App() {
   const backgroundImageUrlLandscape = "/static/images/old_metal_landscape.jpg";
@@ -47,6 +49,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/puzzles" />}/>
           <Route path="/puzzles/*" element={<Home />} />
+          <Route path="/play/puzzle" element={<PlaySocket />} />
           <Route path="/play/:id" element={<Play />} />
         </Routes>
       </div>
