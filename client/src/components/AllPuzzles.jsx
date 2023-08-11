@@ -12,8 +12,8 @@ const AllPuzzles = ({allPuzzles}) => {
     return(
         <div className="d-flex flex-column justify-content-center alighn-items-center">
             <div>
-            <Link className="btn btn-primary btn-outline-dark" to="/puzzles/new">Create a Puzzle</Link>
-            <Link className="btn btn-primary btn-outline-dark" to="/puzzles/instructions">Instructions</Link>
+                <Link className="btn btn-primary btn-outline-dark margin-5" to="/puzzles/new">Create a Puzzle</Link>
+                <Link className="btn btn-primary btn-outline-dark margin-5" to="/puzzles/instructions">Instructions</Link>
             </div>
             <h3 className="headers">Available Puzzles</h3>
             <table>
@@ -21,7 +21,7 @@ const AllPuzzles = ({allPuzzles}) => {
                     <tr>
                         <th className="headers">Title</th>
                         <th className="headers">Size</th>
-                        <th className="headers">Description</th>
+                        <th className="headers">Description / Notes</th>
                         <th className="headers">Actions</th>
                     </tr>
                 </thead>

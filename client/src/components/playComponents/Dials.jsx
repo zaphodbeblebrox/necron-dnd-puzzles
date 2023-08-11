@@ -91,7 +91,8 @@ const Dials = ({puzzle, setPuzzle, isCorrect}) => {
                             imagePath = `${imagePath}${pairedLighting[puzzle.paired_positions[idx][idy]] ? lightsOn : lightsOff}`;
                             imagePath = `${imagePath}${puzzle.locked_positions[idx][idy] ? locked : unlocked}${dialImageExt}`;
                             return(
-                                <img key={idy} src={imagePath} alt={col} onClick={e => DialClickHandler(e,idx,idy)} className="dial"/>
+                                <img key={idy} src={imagePath} alt={col} onClick={e => DialClickHandler(e,idx,idy)}
+                                    className={puzzle.size === 3 ? "dial-3x3" : "dial-9x9"}/>
                             );
                         })}
                     </div>

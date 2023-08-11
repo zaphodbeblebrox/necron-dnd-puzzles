@@ -1,0 +1,17 @@
+#title{
+    text-align: left;
+    max-width: 30vw;
+}
+
+#description{
+    min-width: 50vw;
+    text-align: center;
+}
+
+button{
+    margin: 10px;
+}
+
+.headers{
+    padding: 5px;
+}

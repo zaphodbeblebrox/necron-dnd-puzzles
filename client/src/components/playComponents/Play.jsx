@@ -5,6 +5,7 @@ import Dials from "./Dials";
 import PlayHeader from "./PlayHeader";
 import Attempt from "./Attempt";
 
+
 const Play = (props) => {
     const ambientAudioPath = "/static/audio/factory_ambience.mp3";
     const {id} = useParams();
@@ -30,7 +31,7 @@ const Play = (props) => {
 
         // Play audio
         const audioElement = document.getElementById('audio-ambient');
-        audioElement.play();
+        //audioElement.play();
     }, [])
 
     // useEffect(() => console.log(puzzle),[puzzle]);

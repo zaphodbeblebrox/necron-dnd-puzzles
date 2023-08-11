@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import PuzzleData from "./PuzzleData";
+import "../static/editCreate.css";
 
 const EditCreatePuzzle = ({allPuzzles, setAllPuzzles}) => {
     const puzzleSizes = [3,9];
@@ -97,8 +98,8 @@ const EditCreatePuzzle = ({allPuzzles, setAllPuzzles}) => {
 
     return(
         <div>
-            <Link to="/puzzles">Home</Link>
-            <h3>{id !== undefined ? "Edit" : "Create"} Puzzle</h3>
+            <Link className="btn btn-primary btn-outline-dark" to="/puzzles">Home</Link>
+            <h3 className="headers">{id !== undefined ? "Edit" : "Create"} Puzzle</h3>
             <form onSubmit={puzzleHandler}>
                 <div style={{color: "red"}}>
                     {errors.map((err,idx) => {
@@ -108,39 +109,39 @@ const EditCreatePuzzle = ({allPuzzles, setAllPuzzles}) => {
                     })}
 
                 </div>
-                <div>
-                    <label htmlFor="title">Puzzle Title</label>
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                    <label htmlFor="title" className="headers">Puzzle Title</label>
                     <input type="text" name="title" id="title" value={title} onChange={e => setTitle(e.target.value)}/>
                 </div>
-                <div>
-                    <label htmlFor="size">Puzzle Size</label>
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                    <label htmlFor="size" className="headers">Puzzle Size</label>
                     <select name="size" id="size" value={size} onChange={e => setSize(e.target.value)}>
                         {puzzleSizes.map((size, idx) => <option key={idx} value={size}>{size}x{size}</option>)}
                     </select>
                 </div>
-                <div>
-                    <label htmlFor="description">Puzzle Description</label>
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                    <label htmlFor="description" className="headers">Puzzle Description</label>
                     <input type="text" name="description" id="description" value={description} onChange={e => setDescription(e.target.value)}/>
                 </div>
                 <div>
-                    <label htmlFor="default-positions">Default Positions</label>
+                    <label htmlFor="default-positions" className="headers">Default Positions</label>
                     <PuzzleData data_positions={default_positions} setDataPositions={setDefault_positions} data_type="default" size={size}/>
                 </div>
                 <div>
-                    <label htmlFor="locked-positions">Locked Positions</label>
+                    <label htmlFor="locked-positions" className="headers">Locked Positions</label>
                     <PuzzleData data_positions={locked_positions} setDataPositions={setLocked_positions} data_type="locked" size={size}/>
                 </div>
                 <div>
-                    <label htmlFor="paired-positions">Paired Positions</label>
+                    <label htmlFor="paired-positions" className="headers">Paired Positions</label>
                     <PuzzleData data_positions={paired_positions} setDataPositions={setPaired_positions} data_type="paired" size={size}/>
                 </div>
                 <div>
-                    <label htmlFor="solution-positions">Solution Positions</label>
+                    <label htmlFor="solution-positions" className="headers">Solution Positions</label>
                     <PuzzleData data_positions={solution_positions} setDataPositions={setSolution_positions} data_type="solution" size={size}/>
                 </div>
                 <div>
-                    <button>{id !== undefined ? "Update" : "Create"}</button>
-                    {id !== undefined && <button onClick={DeletePuzzleHandler}>Delete Puzzle</button>} 
+                    <button className="btn btn-primary btn-outline-dark">{id !== undefined ? "Update" : "Create"}</button>
+                    {id !== undefined && <button className="btn btn-danger btn-outline-dark" onClick={DeletePuzzleHandler}>Delete Puzzle</button>} 
                 </div>
             </form>
         </div>

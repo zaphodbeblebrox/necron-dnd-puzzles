@@ -64,7 +64,7 @@ const Attempt = ({puzzle, setIsCorrect}) => {
     }
 
     return(
-        <div className="d-flex flex-column justify-content-center align-items-center">
+        <div className="d-flex flex-column justify-content-around align-items-center">
             <audio id="audio-alarm" controls hidden>
                 <source src={audioAlarm} type="audio/wav" />
             </audio>
@@ -74,7 +74,9 @@ const Attempt = ({puzzle, setIsCorrect}) => {
             <audio id="audio-success" controls hidden>
                 <source src={audioSuccess} type="audio/wav" />
             </audio>
+            
             <img src={attemptImg} alt="Attempts" className="attempts-icon" />
+
             <img src={isSubmitClicked ? submitBtnPressedPath : submitBtnNormalPath} alt="Submit" 
                 onClick={SubmitBtnHandler} className="submit-btn"
                 onMouseDown={SubmitBtnClick} onMouseUp={SubmitBtnRelease}/>
