@@ -33,8 +33,7 @@ const AllPuzzles = ({allPuzzles}) => {
                                 <td><p>{puzzle.size}x{puzzle.size}</p></td>
                                 <td><p>{puzzle.description}</p></td>
                                 <td className="d-flex flex-row justify-content-evenly">
-                                    {/* <Link className="btn btn-primary btn-outline-dark" to={`/play/${puzzle._id}`}>Play</Link> */}
-                                    <Link className="btn btn-primary btn-outline-dark" to={`/play/puzzle`}>Play</Link>
+                                    <Link className="btn btn-primary btn-outline-dark" to={`/play/${puzzle._id}`}>Play</Link>
                                     <Link className="btn btn-primary btn-outline-dark" onClick={e => CopyLinkHandler(e, puzzle._id)}>Copy Link</Link>
                                     <Link className="btn btn-primary btn-outline-dark" to={`/puzzles/edit/${puzzle._id}`}>Edit</Link>
                                 </td>

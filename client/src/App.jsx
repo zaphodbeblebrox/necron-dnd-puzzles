@@ -49,7 +49,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/puzzles" />}/>
           <Route path="/puzzles/*" element={<Home />} />
-          <Route path="/play/puzzle" element={<PlaySocket />} />
           <Route path="/play/:id" element={<Play />} />
         </Routes>
       </div>

@@ -4,7 +4,7 @@ import {Link, useParams} from "react-router-dom";
 import Dials from "./Dials";
 import PlayHeader from "./PlayHeader";
 import Attempt from "./Attempt";
-
+import {socket} from "../../service/socket";
 
 const Play = (props) => {
     const ambientAudioPath = "/static/audio/factory_ambience.mp3";
@@ -18,7 +18,19 @@ const Play = (props) => {
         "default_positions": [[1]],
     });
 
+    // const socket = io("http://localhost:8000/")
+    // socket.on('connect', () => {
+    //     console.log(`You are connected with id: ${socket.id}`)
+    //     socket.join(id)
+    // })
+
+    
+
     useEffect(() => {
+        socket.emit("join-room", id, updater => {
+            
+        });
+
         axios.get(`http://127.0.0.1:8000/api/puzzles/${id}`)
             .then(res => {
                 // console.log(res.data);
@@ -42,7 +54,7 @@ const Play = (props) => {
                 <PlayHeader />
             </div>
             <div className="d-flex flex-row justify-content-center">
-                <Dials puzzle={puzzle} setPuzzle={setPuzzle} isCorrect={isCorrect}/>
+                <Dials puzzle={puzzle} setPuzzle={setPuzzle} isCorrect={isCorrect} roomId={id}/>
                 <Attempt puzzle={puzzle} setIsCorrect={setIsCorrect}/>
                 <audio id="audio-ambient" controls hidden loop>
                     <source src={ambientAudioPath} type="audio/mp3" />

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {io} from "socket.io-client";
 import {socket} from "../../service/socket";
 
-const Dials = ({puzzle, setPuzzle, isCorrect}) => {
+const Dials = ({puzzle, setPuzzle, isCorrect, roomId}) => {
 
     const [pairedLighting, setPairedLighting] = useState({
         "a": false,
@@ -35,7 +34,6 @@ const Dials = ({puzzle, setPuzzle, isCorrect}) => {
     const dialImagePath = "/static/images/dials/";
     const dialImageExt = ".png"
 
-    // const socket = io("http://localhost:8000/")
     socket.on('connect', () => {
         console.log(`You are connected with id: ${socket.id}`)
     })
@@ -46,6 +44,7 @@ const Dials = ({puzzle, setPuzzle, isCorrect}) => {
             newLighting[key] = (Math.round(Math.random())) ? true : false;
         }
         setPairedLighting({...newLighting});
+        socket.emit("load-dials", roomId);
     },[])
 
     useEffect(()=>{
@@ -59,6 +58,7 @@ const Dials = ({puzzle, setPuzzle, isCorrect}) => {
     },[isCorrect])
 
     socket.on('execute-update', (updatedPuzzle, updatedLighting) => {
+        console.log("triggered!!!")
         setPuzzle(updatedPuzzle);
         setPairedLighting({...updatedLighting});
     })
@@ -85,7 +85,7 @@ const Dials = ({puzzle, setPuzzle, isCorrect}) => {
         setPairedLighting({...newLighting});
 
         // Update Socket
-        socket.emit("update-dials", updatedPuzzle, newLighting);
+        socket.emit("update-dials", updatedPuzzle, newLighting, roomId);
 
         // Play audio
         const audioElement = document.getElementById('audio-dial-click');
