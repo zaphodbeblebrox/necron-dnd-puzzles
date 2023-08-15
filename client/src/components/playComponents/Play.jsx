@@ -17,28 +17,33 @@ const Play = (props) => {
         default_positions: [[1]],
     });
 
-    // const socket = io("http://localhost:8000/")
-    // socket.on('connect', () => {
-    //     console.log(`You are connected with id: ${socket.id}`)
-    //     socket.join(id)
-    // })
-
     useEffect(() => {
-        socket.emit("join-room", id, (updater) => {});
+        socket.emit("join-room", id);
 
-        axios
-            .get(`http://127.0.0.1:8000/api/puzzles/${id}`)
-            .then((res) => {
-                // console.log(res.data);
-                const newPuzzle = { ...res.data };
-                newPuzzle.current_positions = res.data.default_positions.map((row) => [...row]);
-                setPuzzle(newPuzzle);
-                // console.log(newPuzzle);
-            })
-            .catch((err) => console.log("Error getting the Puzzle", err));
+        const getDefaultDialsCallback = () => {
+            axios
+                .get(`http://127.0.0.1:8000/api/puzzles/${id}`)
+                .then((res) => {
+                    // console.log(res.data);
+                    const newPuzzle = { ...res.data };
+                    newPuzzle.current_positions = res.data.default_positions.map((row) => [...row]);
+                    setPuzzle(newPuzzle);
+                    // console.log(newPuzzle);
+                })
+                .catch((err) => console.log("Error getting the Puzzle", err));
+        };
+        socket.on("load-default-dials", getDefaultDialsCallback);
+
+        const getCurrentDialsCallback = (currentPuzzle) => {
+            setPuzzle(currentPuzzle);
+        };
+        socket.on("load-current-dials", getCurrentDialsCallback);
+
+        return () => {
+            socket.off(getDefaultDialsCallback);
+            socket.off(getCurrentDialsCallback);
+        };
     }, []);
-
-    // useEffect(() => console.log(puzzle),[puzzle]);
 
     return (
         <div>

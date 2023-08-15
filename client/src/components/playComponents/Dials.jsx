@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {socket} from "../../service/socket";
+import { socket } from "../../service/socket";
 
-const Dials = ({puzzle, setPuzzle, isCorrect, roomId}) => {
-
+const Dials = ({ puzzle, setPuzzle, isCorrect, roomId }) => {
     const [pairedLighting, setPairedLighting] = useState({
-        "a": false,
-        "b": false,
-        "c": false,
-        "d": false,
-        "e": false,
-        "f": false,
-        "g": false,
-        "h": false,
-        "i": false,
-        "j": false
+        a: false,
+        b: false,
+        c: false,
+        d: false,
+        e: false,
+        f: false,
+        g: false,
+        h: false,
+        i: false,
+        j: false,
     });
 
     // Life Dials range from 1-4
@@ -32,82 +31,100 @@ const Dials = ({puzzle, setPuzzle, isCorrect, roomId}) => {
     const lightsOff = "F";
     const lightsOn = "N";
     const dialImagePath = "/static/images/dials/";
-    const dialImageExt = ".png"
+    const dialImageExt = ".png";
 
-    socket.on('connect', () => {
-        console.log(`You are connected with id: ${socket.id}`)
-    })
+    useEffect(() => {
+        socket.on("connect", () => {
+            console.log(`You are connected with id: ${socket.id}`);
+        });
 
-    useEffect(()=>{
-        const newLighting = {...pairedLighting};
-        for (const key in newLighting){
-            newLighting[key] = (Math.round(Math.random())) ? true : false;
-        }
-        setPairedLighting({...newLighting});
-        socket.emit("load-dials", roomId);
-    },[])
+        socket.emit("load-lighting", roomId);
 
-    useEffect(()=>{
-        if(isCorrect){
-            const newLighting = {...pairedLighting};
-            for (const key in newLighting){
+        const defaultLightingCallback = () => {
+            const newLighting = { ...pairedLighting };
+            for (const key in newLighting) {
+                newLighting[key] = Math.round(Math.random()) ? true : false;
+            }
+            setPairedLighting({ ...newLighting });
+        };
+        socket.on("load-default-lighting", defaultLightingCallback);
+
+        const currentLightingCallback = (currentLighting) => {
+            setPairedLighting({ ...currentLighting });
+        };
+        socket.on("load-current-lighting", currentLightingCallback);
+
+        const updateCallback = (updatedPuzzle, updatedLighting) => {
+            setPuzzle(updatedPuzzle);
+            setPairedLighting({ ...updatedLighting });
+        };
+        socket.on("execute-update", updateCallback);
+        return () => {
+            socket.off(updateCallback);
+            socket.off(defaultLightingCallback);
+            socket.off(currentLightingCallback);
+        };
+    }, []);
+
+    // Turn On all lights when puzzle correct
+    useEffect(() => {
+        if (isCorrect) {
+            const newLighting = { ...pairedLighting };
+            for (const key in newLighting) {
                 newLighting[key] = true;
             }
-            setPairedLighting({...newLighting});
+            setPairedLighting({ ...newLighting });
         }
-    },[isCorrect])
-
-    socket.on('execute-update', (updatedPuzzle, updatedLighting) => {
-        console.log("triggered!!!")
-        setPuzzle(updatedPuzzle);
-        setPairedLighting({...updatedLighting});
-    })
+    }, [isCorrect]);
 
     const DialClickHandler = (event, idx, idy) => {
         event.preventDefault();
-        if(puzzle.locked_positions[idx][idy]){
+        if (puzzle.locked_positions[idx][idy]) {
             return;
         }
         // Update dial position
-        const updatedPuzzle = {...puzzle};
-        if(updatedPuzzle.current_positions[idx][idy] <= lifeLimit){
-            updatedPuzzle.current_positions[idx][idy] = (updatedPuzzle.current_positions[idx][idy] === lifeLimit) 
-                ? lifeStart : updatedPuzzle.current_positions[idx][idy] + 1;
-        }
-        else if(updatedPuzzle.current_positions[idx][idy] <= deathLimit){
-            updatedPuzzle.current_positions[idx][idy] = (updatedPuzzle.current_positions[idx][idy] === deathLimit) 
-                ? deathStart : updatedPuzzle.current_positions[idx][idy] + 1;
+        const updatedPuzzle = { ...puzzle };
+        if (updatedPuzzle.current_positions[idx][idy] <= lifeLimit) {
+            updatedPuzzle.current_positions[idx][idy] =
+                updatedPuzzle.current_positions[idx][idy] === lifeLimit ? lifeStart : updatedPuzzle.current_positions[idx][idy] + 1;
+        } else if (updatedPuzzle.current_positions[idx][idy] <= deathLimit) {
+            updatedPuzzle.current_positions[idx][idy] =
+                updatedPuzzle.current_positions[idx][idy] === deathLimit ? deathStart : updatedPuzzle.current_positions[idx][idy] + 1;
         }
         setPuzzle(updatedPuzzle);
         // Update Lighting
-        const newLighting = {...pairedLighting};
-        newLighting[updatedPuzzle.paired_positions[idx][idy]] = (Math.round(Math.random())) ? true : false;
-        setPairedLighting({...newLighting});
+        const newLighting = { ...pairedLighting };
+        newLighting[updatedPuzzle.paired_positions[idx][idy]] = Math.round(Math.random()) ? true : false;
+        setPairedLighting({ ...newLighting });
 
         // Update Socket
         socket.emit("update-dials", updatedPuzzle, newLighting, roomId);
 
         // Play audio
-        const audioElement = document.getElementById('audio-dial-click');
+        const audioElement = document.getElementById("audio-dial-click");
         audioElement.play();
-    }
+    };
 
-
-    return(
+    return (
         <div>
             <audio id="audio-dial-click" controls hidden>
                 <source src={turnDialAudioPath} type="audio/wav" />
             </audio>
             {puzzle.current_positions.map((row, idx) => {
-                return(
+                return (
                     <div key={idx} className="d-flex flex-row justify-content-center align-items-center">
                         {row.map((col, idy) => {
                             let imagePath = `${dialImagePath}${col}`;
                             imagePath = `${imagePath}${pairedLighting[puzzle.paired_positions[idx][idy]] ? lightsOn : lightsOff}`;
                             imagePath = `${imagePath}${puzzle.locked_positions[idx][idy] ? locked : unlocked}${dialImageExt}`;
-                            return(
-                                <img key={idy} src={imagePath} alt={col} onClick={e => DialClickHandler(e,idx,idy)}
-                                    className={puzzle.size === 3 ? "dial-3x3" : "dial-9x9"}/>
+                            return (
+                                <img
+                                    key={idy}
+                                    src={imagePath}
+                                    alt={col}
+                                    onClick={(e) => DialClickHandler(e, idx, idy)}
+                                    className={puzzle.size === 3 ? "dial-3x3" : "dial-9x9"}
+                                />
                             );
                         })}
                     </div>
@@ -115,6 +132,6 @@ const Dials = ({puzzle, setPuzzle, isCorrect, roomId}) => {
             })}
         </div>
     );
-}
+};
 
 export default Dials;
