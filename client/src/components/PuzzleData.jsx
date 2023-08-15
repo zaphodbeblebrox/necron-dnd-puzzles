@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const PuzzleData = ({data_positions, setDataPositions, data_type, size}) => {
-    const dataOptions = [1,2,3,4,5,6,7,8,9];
-    const pairOptions = ["a","b","c","d","e","f","g","h","i","j"];
+const PuzzleData = ({ data_positions, setDataPositions, data_type, size }) => {
+    const dataOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const pairOptions = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
     const lockOptions = [false, true];
 
     const [options, setOptions] = useState([]);
 
     useEffect(() => {
-        switch(data_type){
+        switch (data_type) {
             case "default":
                 setOptions([...dataOptions]);
                 break;
@@ -24,29 +24,30 @@ const PuzzleData = ({data_positions, setDataPositions, data_type, size}) => {
                 setOptions([...dataOptions]);
                 break;
         }
-    },[size]);
+    }, [size]);
 
     useEffect(() => {
-        const initialData = Array.from({length: size}, () => []);
-        for(let i = 0; i<initialData.length; i++){
-            for(let j = 0; j<size; j++){
-                if(data_type)
-                initialData[i].push(options[0]);
+        if (data_positions.length === 0 || (data_positions.length === 3 && size == 9) || (data_positions.length === 9 && size == 3)) {
+            const initialData = Array.from({ length: size }, () => []);
+            for (let i = 0; i < initialData.length; i++) {
+                for (let j = 0; j < size; j++) {
+                    if (data_type) initialData[i].push(options[0]);
+                }
             }
+            setDataPositions(initialData.map((row) => [...row]));
         }
-        setDataPositions(initialData.map((row) => [...row]));
-    },[options]);
+    }, [options]);
 
     const DataHandler = (event, idx, idy) => {
         const updatedData = data_positions.map((row) => [...row]);
         updatedData[idx][idy] = event.target.value;
 
-        switch(data_type){
+        switch (data_type) {
             case "default":
                 updatedData[idx][idy] = parseInt(event.target.value, 10);
                 break;
             case "locked":
-                updatedData[idx][idy] = (event.target.value === "true") ? true : false;
+                updatedData[idx][idy] = event.target.value === "true" ? true : false;
                 break;
             case "paired":
                 updatedData[idx][idy] = event.target.value;
@@ -56,25 +57,32 @@ const PuzzleData = ({data_positions, setDataPositions, data_type, size}) => {
                 break;
         }
         setDataPositions(updatedData.map((row) => [...row]));
-    }
+    };
 
-    return(
+    return (
         <div>
             {data_positions.map((row, idx) => {
-                return(
+                return (
                     <div key={idx} className="d-flex flex-row justify-content-center align-items-center">
                         {row.map((col, idy) => {
-                            if(data_type === "locked"){
-                                return(
-                                    <select key={idy} value={col} onChange={e => DataHandler(e, idx, idy)}>
-                                        {options.map((option, ido) => <option key={ido} value={option}>{option?"True":"False"}</option>)}
+                            if (data_type === "locked") {
+                                return (
+                                    <select key={idy} value={col} onChange={(e) => DataHandler(e, idx, idy)}>
+                                        {options.map((option, ido) => (
+                                            <option key={ido} value={option}>
+                                                {option ? "True" : "False"}
+                                            </option>
+                                        ))}
                                     </select>
                                 );
-                            }
-                            else{
-                                return(
-                                    <select key={idy} value={col} onChange={e => DataHandler(e, idx, idy)}>
-                                        {options.map((option, ido) => <option key={ido} value={option}>{option}</option>)}
+                            } else {
+                                return (
+                                    <select key={idy} value={col} onChange={(e) => DataHandler(e, idx, idy)}>
+                                        {options.map((option, ido) => (
+                                            <option key={ido} value={option}>
+                                                {option}
+                                            </option>
+                                        ))}
                                     </select>
                                 );
                             }
@@ -84,6 +92,6 @@ const PuzzleData = ({data_positions, setDataPositions, data_type, size}) => {
             })}
         </div>
     );
-}
+};
 
 export default PuzzleData;

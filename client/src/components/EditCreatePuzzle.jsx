@@ -69,7 +69,7 @@ const EditCreatePuzzle = ({ allPuzzles, setAllPuzzles }) => {
                 });
         } else {
             axios
-                .put(`http://127.0.0.1:8000/api/puzzles/${id}`, newPuzzle)
+                .put(`${puzzleApi}/${id}`, newPuzzle)
                 .then((res) => {
                     const tempAllPuzzles = allPuzzles.filter((puzzle) => puzzle._id !== id);
                     tempAllPuzzles.push(res.data);
@@ -91,7 +91,7 @@ const EditCreatePuzzle = ({ allPuzzles, setAllPuzzles }) => {
     const DeletePuzzleHandler = (event) => {
         event.preventDefault();
         axios
-            .delete(`http://127.0.0.1:8000/api/puzzles/${id}`)
+            .delete(`${puzzleApi}/${id}`)
             .then((res) => {
                 const tempAllPuzzles = allPuzzles.filter((puzzle) => puzzle._id !== id);
                 setAllPuzzles([...tempAllPuzzles]);

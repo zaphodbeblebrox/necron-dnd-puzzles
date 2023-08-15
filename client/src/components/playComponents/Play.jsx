@@ -5,6 +5,7 @@ import Dials from "./Dials";
 import PlayHeader from "./PlayHeader";
 import Attempt from "./Attempt";
 import { socket } from "../../service/socket";
+import { puzzleApi } from "../../service/api";
 
 const Play = (props) => {
     const { id } = useParams();
@@ -22,7 +23,7 @@ const Play = (props) => {
 
         const getDefaultDialsCallback = () => {
             axios
-                .get(`http://127.0.0.1:8000/api/puzzles/${id}`)
+                .get(`${puzzleApi}/${id}`)
                 .then((res) => {
                     // console.log(res.data);
                     const newPuzzle = { ...res.data };
